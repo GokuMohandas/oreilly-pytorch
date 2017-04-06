@@ -4,6 +4,9 @@ from __future__ import (
 
 """
 basics.py
+Example of NN in numpy/PyTorch.
+Note: Strong overfitting but example is
+      just to show forward/backward pass.
 """
 
 __author__ = "Goku Mohandas"
@@ -34,7 +37,12 @@ def get_args():
     parser.add_argument ('--seed', type=int, default=1234)
     parser.add_argument ('--num_samples', type=int, default=200)
     parser.add_argument ('--dimensions', type=int, default=2)
-    parser.add_argument ('--num_classes', type=int, default=4)
+    parser.add_argument ('--num_classes', type=int, default=5)
+    parser.add_argument ('--num_hidden_units', type=int, default=100)
+    parser.add_argument ('--regularization', type=float, default=1e-3)
+    parser.add_argument ('--learning_rate', type=float, default=1.0)
+    parser.add_argument ('--num_epochs', type=int, default=5000)
+
     return parser.parse_args ()
 
 def get_data(seed, num_samples, dimensions, num_classes):
@@ -48,7 +56,7 @@ def get_data(seed, num_samples, dimensions, num_classes):
 
     # Create spiral data
     X = np.zeros ((N*C, D))
-    y = np.zeros (N*C)
+    y = np.zeros (N*C, dtype='uint8')
     for j in xrange (C):
         ix = range (N*j,N*(j+1))
         r = np.linspace (0.0,1,N)
@@ -68,20 +76,105 @@ def plot_data(X, y):
     plt.scatter (X[:, 0], X[:, 1], c=y, s=20, cmap=plt.cm.Spectral)
     plt.show ()
 
-def numpy_version(X, y):
+def plot_model(X, y, w1, b1, w2, b2):
+    """
+    Plot the model.
+    """
+    h = 0.01
+    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
+                         np.arange(y_min, y_max, h))
+    Z = np.dot(np.maximum(0, np.dot(np.c_[xx.ravel(), yy.ravel()], w1) + b1), w2) + b2
+    Z = np.argmax(Z, axis=1)
+    Z = Z.reshape(xx.shape)
+    fig = plt.figure()
+    plt.contourf(xx, yy, Z, cmap=plt.cm.Spectral, alpha=0.8)
+    plt.scatter(X[:, 0], X[:, 1], c=y, s=40, cmap=plt.cm.Spectral)
+    plt.xlim(xx.min(), xx.max())
+    plt.ylim(yy.min(), yy.max())
+    plt.show()
+
+def numpy_version(X, y, num_hidden_units, num_classes, regularization,
+    learning_rate, num_epochs):
     """
     Implement NN with numpy.
     """
-    pass
 
+    # Dimensions
+    N = len(X) # num. samples
+    D_in = len(X[0]) # input dim.
+    H = num_hidden_units # hidden dim.
+    D_out = num_classes # output dim.
 
+    # Weights
+    w1 = 0.01 * np.random.randn(D_in, H)
+    w2 = 0.01 * np.random.randn(H, D_out)
+
+    b1 = np.zeros((1, H))
+    b2 = np.zeros((1, D_out))
+
+    for epoch in range(num_epochs):
+
+        # Forward pass
+        h = np.dot(X, w1) + b1
+        h_relu = np.maximum(0, h)
+        scores = np.dot(h_relu, w2) + b2
+        exp_scores = np.exp(scores)
+        probs = exp_scores / np.sum(exp_scores, axis=1, keepdims=True) # [N, D_out]
+
+        # Cross entropy loss
+        y_true_logprobs = -np.log(probs[range(N), y])
+        loss = np.sum(y_true_logprobs) / N
+        loss += 0.5*regularization*np.sum(w1*w1) + 0.5*regularization*np.sum(w2*w2)
+
+        # Backpropagation
+        dJ__dscores = probs
+        dJ__dscores[range(N), y] -= 1
+        dJ__dscores /= N
+
+        dJ__dw2 = np.dot(h_relu.T, dJ__dscores)
+        dJ__db2 = np.sum(dJ__dscores, axis=0, keepdims=True)
+        dJ__dh_relu = np.dot(dJ__dscores, w2.T)
+        dJ__dh_relu[h_relu <= 0] = 0 # dJ__dh
+        dJ__dh = dJ__dh_relu
+        dJ__dw1 = np.dot(X.T, dJ__dh)
+        dJ__db1 = np.sum(dJ__dh, axis=0, keepdims=True)
+
+        # Derivative of regularization component
+        dJ__dw2 += regularization * w2
+        dJ__dw1 += regularization * w1
+
+        # Gradient descent
+        w1 -= learning_rate * dJ__dw1
+        b1 -= learning_rate * dJ__db1
+        w2 -= learning_rate * dJ__dw2
+        b2 += -learning_rate * dJ__db2
+
+        # Verbose
+        if (epoch % 1000 == 0) or (epoch == num_epochs-1):
+
+            # Accuracy
+            y_pred = np.argmax(scores, axis=1)
+            train_accuracy = (np.mean(y_pred == y))
+
+            print ("[EPOCH]: %i, [TRAIN LOSS]: %.6f, [TRAIN ACC]: %.3f" %
+                (epoch, loss, train_accuracy))
+
+    # Plot trained model
+    plot_model(X, y, w1, b1, w2, b2)
 
 if __name__ == '__main__':
 
     FLAGS = get_args ()
     X, y = get_data (FLAGS.seed, FLAGS.num_samples, FLAGS.dimensions,
-                     FLAGS.num_classes)
-    plot_data(X, y)
+        FLAGS.num_classes)
+    #plot_data(X, y)
+
+    # Numpy
+    numpy_version(X, y, FLAGS.num_hidden_units, FLAGS.num_classes,
+        FLAGS.regularization, FLAGS.learning_rate, FLAGS.num_epochs)
+
 
 
 
