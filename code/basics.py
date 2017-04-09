@@ -673,7 +673,6 @@ def pytorch_cuda(X, y, num_hidden_units, num_classes, regularization,
         torch.transpose(model.fc2.weight.data, 0, 1).numpy(),
         model.fc2.bias.data.numpy())
 
-
 def main(FLAGS):
     """
     """
@@ -712,7 +711,6 @@ def main(FLAGS):
         FLAGS.regularization, FLAGS.learning_rate, FLAGS.num_epochs,
         cuda_enabled=FLAGS.cuda)
 
-
 if __name__ == '__main__':
 
     FLAGS = get_args()
@@ -721,9 +719,9 @@ if __name__ == '__main__':
     FLAGS.cuda = not FLAGS.no_cuda and torch.cuda.is_available()
 
     # Seeding
-    torch.manual_seed(1234)
+    torch.manual_seed(FLAGS.seed)
     if FLAGS.cuda:
-        torch.cuda.manual_seed_all(1234)
+        torch.cuda.manual_seed_all(FLAGS.seed)
 
     main(FLAGS)
 

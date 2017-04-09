@@ -19,3 +19,8 @@ pip install torchvision
 docker build -t gokumd/oreilly-pytorch:gpu -f Dockerfile.gpu .
 nvidia-docker run -it --ipc=host -p 8888:8888 -p 6006:6006 oreilly-pytorch:gpu bash
 ```
+
+### Start IPython Notebook
+```bash
+jupyter notebook
+```
