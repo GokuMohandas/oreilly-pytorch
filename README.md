@@ -14,3 +14,8 @@ pip install http://download.pytorch.org/whl/torch-0.1.11.post5-cp27-none-macosx_
 pip install torchvision
 ```
 
+### Using Docker
+```bash
+docker build -t gokumd/oreilly-pytorch:gpu -f Dockerfile.gpu .
+nvidia-docker run -it --ipc=host -p 8888:8888 -p 6006:6006 oreilly-pytorch:gpu bash
+```
