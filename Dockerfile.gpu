@@ -35,6 +35,12 @@ RUN pip --no-cache-dir install \
 
 WORKDIR /root/oreilly-pytorch
 
+# TensorBoard
+EXPOSE 6006
+
+# IPython
+EXPOSE 8888
+
 COPY . .
 
 
