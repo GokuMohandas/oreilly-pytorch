@@ -1,6 +1,6 @@
 FROM nvidia/cuda:8.0-cudnn5-devel-ubuntu16.04
 
-MAINTAINER Goku Mohandas <gokumd@gmail.com>
+MAINTAINER Goku Mohandas
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
@@ -18,6 +18,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         software-properties-common \
         unzip \
         vim \
+        lsof \
+        wget \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -33,6 +35,7 @@ RUN pip --no-cache-dir install \
         Pillow \
         virtualenv
 
+# Step into working directory
 WORKDIR /root/oreilly-pytorch
 
 # TensorBoard
@@ -41,7 +44,18 @@ EXPOSE 6006
 # IPython
 EXPOSE 8888
 
+# Set up our notebook config.
+COPY jupyter_notebook_config.py /root/.jupyter/
+
+# Copy all files
 COPY . .
+
+# Install pytorch packages
+RUN pip --no-cache-dir install -r requirements.txt
+
+# Start notebook
+ENTRYPOINT ["/bin/bash"]
+
 
 
 

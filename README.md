@@ -30,5 +30,5 @@ nvidia-docker run -it --ipc=host -p 8888:8888 -p 6006:6006 gokumd/oreilly-pytorc
 jupyter notebook
 ```
 
-docker run -it --net=bridge -p 8888:8888 -p 6006:6006 gokumd/oreilly-pytorch:gpu bash
+docker run -it -p 8888:8888 -p 6006:6006 gokumd/oreilly-pytorch:gpu bash
 
