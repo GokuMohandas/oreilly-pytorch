@@ -1,5 +1,6 @@
 # oreilly-pytorch
 Introductory PyTorch Tutorials
+
 Alfredo Canziani & Goku Mohandas
 
 ### Environment Options
