@@ -1,34 +1,86 @@
 # oreilly-pytorch
 Introductory PyTorch Tutorials
+Alfredo Canziani & Goku Mohandas
 
-### Setup Environment
+### Environment Options
 ```bash
-virtualenv -p python2.7 venv
-source venv/bin/activate
-pip install -r requirements.txt
+1. Docker container (recommended)
+2. Local Machine
 ```
 
-### Install PyTorch Components
+### Option 1: Docker
+#### CPU
 ```bash
-pip install http://download.pytorch.org/whl/torch-0.1.11.post5-cp27-none-macosx_10_7_x86_64.whl
+docker build -t gokumd/pytorch-docker:cpu -f Dockerfile.gpu .
+docker run -it --name=nlpbook --ipc=host -p 8888:8888 -p 6006:6006 gokumd/pytorch-docker:cpu
+```
+#### GPU
+```bash
+docker build -t gokumd/pytorch-docker:gpu -f Dockerfile.gpu .
+nvidia-docker run -it --ipc=host -p 8888:8888 -p 6006:6006 gokumd/pytorch-docker:gpu
+```
+#### Setup virtualenv:
+```bash
+virtualenv -p python3.6 venv
+source venv/bin/activate
+pip install numpy==1.12.1
+pip install requests==2.13.0
+pip install -r requirements.txt
+pip install http://download.pytorch.org/whl/cu80/torch-0.1.11.post5-cp35-cp35m-linux_x86_64.whl
 pip install torchvision
 ```
 
-### Load data sources
+### Option 2: Local machine
+#### OSX:
 ```bash
-bash fetch_data.sh
+virtualenv -p python3.6 venv
+source venv/bin/activate
+pip install numpy==1.12.1
+pip install requests==2.13.0
+pip install -r requirements.txt
+pip install http://download.pytorch.org/whl/torch-0.1.11.post5-cp36-cp36m-macosx_10_7_x86_64.whl
+pip install torchvision
+```
+#### Linux:
+```bash
+virtualenv -p python3.6 venv
+source venv/bin/activate
+pip install numpy==1.12.1
+pip install requests==2.13.0
+pip install -r requirements.txt
+pip install http://download.pytorch.org/whl/cu80/torch-0.1.11.post5-cp35-cp35m-linux_x86_64.whl
+pip install torchvision
 ```
 
-### Using Docker
+### Conda
+If you are use the Anaconda python distribution, follow these instructions to setup the docker container and then the virtual environment.
 ```bash
-docker build -t gokumd/oreilly-pytorch:gpu -f Dockerfile.gpu .
-nvidia-docker run -it --ipc=host -p 8888:8888 -p 6006:6006 gokumd/oreilly-pytorch:gpu bash
+clone https://github.com/pytorch/pytorch in the root of this repo and replace the Dockerfile with our Dockerfile.conda
+docker build -t gokumd/pytorch-docker-conda:cpu -f Dockerfile.conda .
+docker run -it --ipc=host -p 8888:8888 -p 6006:6006 gokumd/pytorch-docker-conda:cpu
+conda update conda
+conda create -n venv python=3.5 anaconda
+source activate venv
+conda install --yes --file requirements.txt
 ```
 
-### Start IPython Notebook
+### Set Up Crayon (Port: 8888) - https://github.com/torrvision/crayon
 ```bash
-jupyter notebook
+cd server
+docker build -t crayon:latest -f Dockerfile .
+docker run -d -p 8888:8888 -p 8889:8889 --name crayon crayon
+Go to locahost:8888 for Tensorboard.
 ```
 
-docker run -it -p 8888:8888 -p 6006:6006 gokumd/oreilly-pytorch:gpu bash
+### Start IPython Notebook (Port: 8889)
+```bash
+jupyter notebook --allow-root
+```
+
+### Common Docker Issues
+```bash
+If ports are occupied:
+    lsof -nP +c 15 | grep LISTEN
+    sudo kill -9 <>
+```
 
