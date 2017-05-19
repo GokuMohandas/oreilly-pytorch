@@ -1,6 +1,6 @@
 # oreilly-pytorch
 Introductory PyTorch Tutorials
-- [@alfredocanziani](https://twitter.com/alfredocanziani)
+- [@AlfredoCanziani](https://twitter.com/alfredocanziani)
 - [@GokuMohandas](https://twitter.com/gokumohandas)
 
 ### Environment Options
