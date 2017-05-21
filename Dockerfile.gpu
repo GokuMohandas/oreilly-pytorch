@@ -50,12 +50,6 @@ COPY jupyter_notebook_config.py /root/.jupyter/
 # Copy all files
 COPY . .
 
-# Install pytorch packages
-RUN pip --no-cache-dir install -r requirements.txt
-
-# Start notebook
-ENTRYPOINT ["/bin/bash"]
-
 
 
 
