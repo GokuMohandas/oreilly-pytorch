@@ -65,7 +65,7 @@ source activate venv
 conda install --yes --file requirements.txt
 ```
 
-### Set Up Crayon (Port: 8888) - https://github.com/torrvision/crayon
+### Set Up Crayon BEFORE jupyter (Port: 8888) - https://github.com/torrvision/crayon
 ```bash
 cd server
 docker build -t crayon:latest -f Dockerfile .
@@ -73,7 +73,7 @@ docker run -d -p 8888:8888 -p 8889:8889 --name crayon crayon
 Go to locahost:8888 for Tensorboard.
 ```
 
-### Start IPython Notebook (Port: 8889)
+### Start IPython/Jupyter Notebook (Port: 8889)
 ```bash
 jupyter notebook --allow-root
 ```
