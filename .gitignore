@@ -11,6 +11,7 @@ venv/
 data/
 etc/
 getting_started.key
+embeddings/
 
 # Distribution / packaging
 .Python
