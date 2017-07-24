@@ -34,12 +34,12 @@ pip install torchvision
 ### Option 2: Local machine
 #### OSX:
 ```bash
-virtualenv -p python3.6 venv
+virtualenv -p python3.5 venv
 source venv/bin/activate
 pip install numpy==1.12.1
 pip install requests==2.13.0
 pip install -r requirements.txt
-pip install http://download.pytorch.org/whl/torch-0.1.11.post5-cp36-cp36m-macosx_10_7_x86_64.whl
+pip install http://download.pytorch.org/whl/torch-0.1.12.post2-cp35-cp35m-macosx_10_7_x86_64.whl 
 pip install torchvision
 ```
 #### Linux:
