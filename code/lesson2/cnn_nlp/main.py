@@ -22,9 +22,9 @@ from utils import (
     sample,
 )
 
-from train import (
-    train,
-)
+#from train import (
+#    train,
+#
 
 from infer import (
     infer,
@@ -73,6 +73,7 @@ def main(FLAGS):
         infer(
             data_dir=FLAGS.data_dir,
             model_name=FLAGS.model_name,
+            sentence=FLAGS.sentence,
             )
 
     else:

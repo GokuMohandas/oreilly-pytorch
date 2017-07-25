@@ -36,7 +36,7 @@ from utils import (
     pad,
 )
 
-def infer(data_dir, model_name):
+def infer(data_dir, model_name, sentence=None):
     """
     """
 
@@ -48,7 +48,8 @@ def infer(data_dir, model_name):
 
     # Enter the sentence
     print ("Classes:", index2class.values())
-    sentence = input("Please enter the sentence: ")
+    if not sentence:
+        sentence = input("Please enter the sentence: ")
 
     # Normalize the sentece
     sentence = normalize_string(sentence)

@@ -32,6 +32,7 @@ model_arg.add_argument('--num_filters',    type=int,            default=200,    
 model_arg.add_argument('--dropout_p',      type=float,          default=0.5,     help='dropout.')
 model_arg.add_argument('--decay_rate',     type=float,          default=0.9,     help='decay_rate.')
 model_arg.add_argument('--max_grad_norm',  type=float,          default=5.0,     help='clip the gradient to prevent explosion.')
+model_arg.add_argument('--sentence',         type=str,                             help="inference sentence")
 
 def get_config():
     config, unparsed = parser.parse_known_args()
