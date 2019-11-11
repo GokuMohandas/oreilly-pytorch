@@ -1,7 +1,7 @@
 # oreilly-pytorch
 Introductory PyTorch Tutorials
-- [@AlfredoCanziani](https://twitter.com/alfredocanziani)
-- [@GokuMohandas](https://twitter.com/gokumohandas)
+- Alfredo Canziani – [@alfcnz](https://twitter.com/alfcnz)
+- Goku Mohandas – [@GokuMohandas](https://twitter.com/gokumohandas)
 
 ### Environment Options
 ```bash
