@@ -7,6 +7,6 @@ seaborn==0.7.1
 scipy==0.19.0
 scikit-learn==0.18.1
 sklearn==0.0
-requests==2.13.0
+requests==2.20.0
 pycrayon==0.5
 ipywidgets==6.0.0
